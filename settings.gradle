@@ -12,4 +12,6 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'contract-demo'
+rootProject.name = 'contract-testing-demo'
+include 'api'
+include 'app'
