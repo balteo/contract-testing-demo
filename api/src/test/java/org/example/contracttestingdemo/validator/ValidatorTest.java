@@ -46,8 +46,33 @@ class ValidatorTest {
     }
 
     @Test
-    void shouldRejectDuplicateEmail() {
+    void shouldSignUpUser() {
+        WebTestClient client = WebTestClient
+            .bindToRouterFunction(config.route(userHandler))
+            .build();
 
+        User user = User.builder()
+            .firstName("John")
+            .lastName("Smith")
+            .email("john@example.com")
+            .build();
+
+        client
+            .post()
+            .uri("/api/sign-up")
+            .body(Mono.just(user), User.class)
+            .exchange()
+            .expectStatus()
+            .is2xxSuccessful()
+            .expectBody()
+            .jsonPath("$.id")
+            .isNotEmpty()
+            .jsonPath("$.firstName")
+            .isEqualTo("John");
+    }
+
+    @Test
+    void shouldRejectDuplicateEmail() {
         WebTestClient client = WebTestClient
             .bindToRouterFunction(config.route(userHandler))
             .build();
