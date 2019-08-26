@@ -28,8 +28,9 @@ public class UserHandler {
     private final @NonNull UserValidator userValidator;
 
     public Mono<ServerResponse> getUsers(ServerRequest serverRequest) {
-        return ok().contentType(APPLICATION_JSON).
-            body(userRepository.findAll(), User.class);
+        return ok()
+            .contentType(APPLICATION_JSON)
+            .body(userRepository.findAll(), User.class);
     }
 
     public Mono<ServerResponse> signUpUser(ServerRequest serverRequest) {
