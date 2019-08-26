@@ -11,6 +11,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -31,12 +32,27 @@ public class UserHandler {
             body(userRepository.findAll(), User.class);
     }
 
-    //FIXME: separate validator from handler
     public Mono<ServerResponse> signUpUser(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(User.class)
-            .flatMap(this::createUserIfEmailNotExists);
+            .flatMap(user -> Flux.concat(
+                validateUser(user),
+                validateEmailNotExists(user),
+                saveUser(user))
+                .next()
+                .single()
+            );
     }
 
+    public Mono<ServerResponse> signUpUser_(ServerRequest serverRequest) {
+        return serverRequest
+            .bodyToMono(User.class)
+            .cache()
+            .flatMap(user -> validateUser(user)
+                .or(validateEmailNotExists(user))
+                .or(saveUser(user))
+                .single()
+            );
+    }
 
     private Mono<ServerResponse> validateUser(User user) {
         return Mono.just(new BeanPropertyBindingResult(user, User.class.getName()))
@@ -49,17 +65,6 @@ public class UserHandler {
             );
     }
 
-    private Mono<ServerResponse> validateUser(Mono<User> userMono) {
-        return userMono.flatMap(user -> Mono.just(new BeanPropertyBindingResult(user, User.class.getName()))
-            .doOnNext(err -> userValidator.validate(user, err))
-            .filter(AbstractBindingResult::hasErrors)
-            .flatMap(err ->
-                status(BAD_REQUEST)
-                    .contentType(APPLICATION_JSON)
-                    .body(BodyInserters.fromObject(err.getAllErrors()))
-            ));
-    }
-
     private Mono<ServerResponse> validateEmailNotExists(User user) {
         return userRepository.findByEmail(user.getEmail())
             .flatMap(existingUser ->
@@ -69,44 +74,11 @@ public class UserHandler {
             );
     }
 
-    private Mono<ServerResponse> validateEmailNotExists(Mono<User> userMono) {
-        return userMono.flatMap(user -> userRepository.findByEmail(user.getEmail())
-            .flatMap(existingUser ->
-                status(BAD_REQUEST)
-                    .contentType(APPLICATION_JSON)
-                    .body(BodyInserters.fromObject("User already exists."))
-            ));
-    }
-
     private Mono<ServerResponse> saveUser(User user) {
         return userRepository.save(user)
             .flatMap(newUser -> status(CREATED)
                 .contentType(APPLICATION_JSON)
                 .body(BodyInserters.fromObject(newUser))
-            );
-    }
-
-    private Mono<ServerResponse> saveUser(Mono<User> userMono) {
-        return userMono.flatMap(user -> userRepository.save(user)
-            .flatMap(newUser -> status(CREATED)
-                .contentType(APPLICATION_JSON)
-                .body(BodyInserters.fromObject(newUser))
-            ));
-    }
-
-    private Mono<ServerResponse> createUserIfEmailNotExists(User user) {
-        return userRepository.findByEmail(user.getEmail())
-            .flatMap(existingUser ->
-                status(BAD_REQUEST).contentType(APPLICATION_JSON)
-                    .body(BodyInserters.fromObject("User already exists."))
-            )
-            .switchIfEmpty(
-                validateUser(user)
-                    .switchIfEmpty(
-                        userRepository.save(user)
-                            .flatMap(newUser -> status(CREATED).contentType(APPLICATION_JSON)
-                                .body(BodyInserters.fromObject(newUser)))
-                    )
             );
     }
 }

@@ -2,6 +2,7 @@ package org.example.contracttestingdemo.validator;
 
 import org.example.contracttestingdemo.domain.User;
 import org.example.contracttestingdemo.handler.UserHandler;
+import org.example.contracttestingdemo.repository.UserRepository;
 import org.example.contracttestingdemo.routerfunction.UserRouter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:db/clean.sql")
 @SpringBootTest
-class ValidatorTest {
+class UserSignUpTest {
 
     @Autowired
     private UserRouter config;
@@ -32,6 +33,9 @@ class ValidatorTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void shouldRejectInvalidEmail() {
