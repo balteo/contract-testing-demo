@@ -32,10 +32,11 @@ public class UserHandler {
     }
 
     //FIXME: separate validator from handler
-    public Mono<ServerResponse> saveUser(ServerRequest serverRequest) {
+    public Mono<ServerResponse> signUpUser(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(User.class)
             .flatMap(this::createUserIfEmailNotExists);
     }
+
 
     private Mono<ServerResponse> validateUser(User user) {
         return Mono.just(new BeanPropertyBindingResult(user, User.class.getName()))
@@ -46,6 +47,51 @@ public class UserHandler {
                     .contentType(APPLICATION_JSON)
                     .body(BodyInserters.fromObject(err.getAllErrors()))
             );
+    }
+
+    private Mono<ServerResponse> validateUser(Mono<User> userMono) {
+        return userMono.flatMap(user -> Mono.just(new BeanPropertyBindingResult(user, User.class.getName()))
+            .doOnNext(err -> userValidator.validate(user, err))
+            .filter(AbstractBindingResult::hasErrors)
+            .flatMap(err ->
+                status(BAD_REQUEST)
+                    .contentType(APPLICATION_JSON)
+                    .body(BodyInserters.fromObject(err.getAllErrors()))
+            ));
+    }
+
+    private Mono<ServerResponse> validateEmailNotExists(User user) {
+        return userRepository.findByEmail(user.getEmail())
+            .flatMap(existingUser ->
+                status(BAD_REQUEST)
+                    .contentType(APPLICATION_JSON)
+                    .body(BodyInserters.fromObject("User already exists."))
+            );
+    }
+
+    private Mono<ServerResponse> validateEmailNotExists(Mono<User> userMono) {
+        return userMono.flatMap(user -> userRepository.findByEmail(user.getEmail())
+            .flatMap(existingUser ->
+                status(BAD_REQUEST)
+                    .contentType(APPLICATION_JSON)
+                    .body(BodyInserters.fromObject("User already exists."))
+            ));
+    }
+
+    private Mono<ServerResponse> saveUser(User user) {
+        return userRepository.save(user)
+            .flatMap(newUser -> status(CREATED)
+                .contentType(APPLICATION_JSON)
+                .body(BodyInserters.fromObject(newUser))
+            );
+    }
+
+    private Mono<ServerResponse> saveUser(Mono<User> userMono) {
+        return userMono.flatMap(user -> userRepository.save(user)
+            .flatMap(newUser -> status(CREATED)
+                .contentType(APPLICATION_JSON)
+                .body(BodyInserters.fromObject(newUser))
+            ));
     }
 
     private Mono<ServerResponse> createUserIfEmailNotExists(User user) {

@@ -17,7 +17,7 @@ public class UserRouter {
     public RouterFunction<ServerResponse> route(UserHandler userHandler) {
         return RouterFunctions.route()
             .GET("/api/user", accept(APPLICATION_JSON), userHandler::getUsers)
-            .POST("/api/sign-up", accept(APPLICATION_JSON), userHandler::saveUser)
+            .POST("/api/sign-up", accept(APPLICATION_JSON), userHandler::signUpUser)
             .build();
     }
 }
