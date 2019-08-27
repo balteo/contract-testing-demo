@@ -77,6 +77,11 @@ test {
     useJUnitPlatform()
 }
 
+contracts {
+    packageWithBaseClasses = 'org.example.contracttestingdemo.contracts.signup'
+    testFramework = 'JUNIT5'
+}
+
 bootBuildImage {
     builder = 'paketobuildpacks/builder:tiny'
     environment = ['BP_NATIVE_IMAGE': 'true']
