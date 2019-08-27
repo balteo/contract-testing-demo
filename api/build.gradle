@@ -69,6 +69,11 @@ test {
     useJUnitPlatform()
 }
 
+contracts {
+    packageWithBaseClasses = 'org.example.contracttestingdemo.contracts.signup'
+    testFramework = 'JUNIT5'
+}
+
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
