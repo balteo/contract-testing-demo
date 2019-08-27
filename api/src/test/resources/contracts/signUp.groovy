@@ -1,7 +1,7 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
         method 'POST'
-        url '/sign-up'
+        url '/api/sign-up'
         body([
             firstName  : "John",
             lastName   : "Smith",
@@ -12,9 +12,9 @@ org.springframework.cloud.contract.spec.Contract.make {
         }
     }
     response {
-        status OK()
+        status CREATED()
         body([
-            id       : 1,
+            id       : 3,
             firstName: "John",
             lastName : "Smith",
             email    : "john@example.com"

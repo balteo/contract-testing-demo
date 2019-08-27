@@ -64,6 +64,7 @@ dependencies {
     implementation 'commons-validator:commons-validator:1.6'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation 'io.rest-assured:spring-web-test-client:4.0.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
@@ -78,6 +79,7 @@ test {
 }
 
 contracts {
+    testMode = "WEBTESTCLIENT"
     packageWithBaseClasses = 'org.example.contracttestingdemo.contracts.signup'
     testFramework = 'JUNIT5'
 }
