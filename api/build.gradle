@@ -58,6 +58,7 @@ dependencies {
 //    runtimeOnly 'io.r2dbc:r2dbc-h2:1.0.0.M7'
     annotationProcessor 'org.projectlombok:lombok'
     compile 'commons-validator:commons-validator:1.6'
+    testImplementation 'io.rest-assured:spring-web-test-client:4.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -70,6 +71,7 @@ test {
 }
 
 contracts {
+    testMode = "WEBTESTCLIENT"
     packageWithBaseClasses = 'org.example.contracttestingdemo.contracts.signup'
     testFramework = 'JUNIT5'
 }
