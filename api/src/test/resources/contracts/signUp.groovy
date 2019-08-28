@@ -1,7 +1,7 @@
 org.springframework.cloud.contract.spec.Contract.make {
     request {
         method 'POST'
-        url '/api/sign-up'
+        url '/api/user'
         body([
             firstName  : "John",
             lastName   : "Smith",

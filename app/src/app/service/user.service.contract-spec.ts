@@ -19,7 +19,7 @@ describe('UserService', () => {
     const user: User = {
       firstName: 'John',
       lastName: 'Smith',
-      email: 'john.smith@example.com'
+      email: 'john@example.com'
     };
 
     service
