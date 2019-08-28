@@ -9,6 +9,7 @@
     "polyfills.ts"
   ],
   "exclude": [
+    "**/*.contract-spec.ts",
     "**/*.spec.ts",
     "./setup-jest.ts"
   ]
