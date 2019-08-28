@@ -1,19 +1,33 @@
 import { TestBed } from '@angular/core/testing';
 
 import { UserService } from './user.service';
+import { User } from '../domain/user.model';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('UserService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [
-      HttpClientTestingModule,
-      HttpClientModule
-    ]
-  }));
 
-  it('should create user', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule],
+      providers: [UserService]
+    });
+  });
+
+  it('should create user', (done) => {
     const service: UserService = TestBed.get(UserService);
-    expect(service).toBeTruthy();
+
+    const user: User = {
+      firstName: 'John',
+      lastName: 'Smith',
+      email: 'john.smith@example.com'
+    };
+
+    service
+      .createUser(user)
+      .subscribe(
+        (user: User) => {
+          done();
+          expect(user).not.toBeNull();
+        });
   });
 });
