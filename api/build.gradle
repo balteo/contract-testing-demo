@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath 'org.springframework.cloud:spring-cloud-contract-gradle-plugin:2.1.2.RELEASE'
+        classpath "org.springframework.cloud:spring-cloud-contract-pact:2.1.2.RELEASE"
     }
 }
 
@@ -75,6 +76,14 @@ contracts {
     testMode = "WEBTESTCLIENT"
     packageWithBaseClasses = 'org.example.contracttestingdemo.contracts.signup'
     testFramework = 'JUNIT5'
+    contractDependency {
+        stringNotation = "${project.group}:${project.name}:+"
+    }
+    contractsPath = '*'
+    contractsMode = "REMOTE"
+    contractRepository {
+        repositoryUrl = "pact://http://localhost:8085"
+    }
 }
 
 dependencyManagement {
