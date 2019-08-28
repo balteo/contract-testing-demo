@@ -16,8 +16,8 @@ public class UserRouter {
     @Bean
     public RouterFunction<ServerResponse> route(UserHandler userHandler) {
         return RouterFunctions.route()
-            .GET("/api/user", accept(APPLICATION_JSON), userHandler::getUsers)
-            .POST("/api/sign-up", accept(APPLICATION_JSON), userHandler::signUpUser)
+            .GET("/api/user", accept(APPLICATION_JSON), userHandler::findUsers)
+            .POST("/api/user", accept(APPLICATION_JSON), userHandler::createUser)
             .build();
     }
 }

@@ -2,7 +2,6 @@ package org.example.contracttestingdemo.validator;
 
 import org.example.contracttestingdemo.domain.User;
 import org.example.contracttestingdemo.handler.UserHandler;
-import org.example.contracttestingdemo.repository.UserRepository;
 import org.example.contracttestingdemo.routerfunction.UserRouter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +33,6 @@ class UserSignUpTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @Test
     void shouldRejectInvalidEmail() {
         User user = User.builder()
@@ -63,7 +59,7 @@ class UserSignUpTest {
 
         client
             .post()
-            .uri("/api/sign-up")
+            .uri("/api/user")
             .body(Mono.just(user), User.class)
             .exchange()
             .expectStatus()
@@ -95,7 +91,7 @@ class UserSignUpTest {
 
         client
             .post()
-            .uri("/api/sign-up")
+            .uri("/api/user")
             .body(Mono.just(user), User.class)
             .exchange()
             .expectStatus()
@@ -105,7 +101,7 @@ class UserSignUpTest {
 
         client
             .post()
-            .uri("/api/sign-up")
+            .uri("/api/user")
             .body(Mono.just(otherUser), User.class)
             .exchange()
             .expectStatus()
@@ -131,7 +127,7 @@ class UserSignUpTest {
 
         client
             .post()
-            .uri("/api/sign-up")
+            .uri("/api/user")
             .body(Mono.just(user), User.class)
             .exchange()
             .expectStatus()

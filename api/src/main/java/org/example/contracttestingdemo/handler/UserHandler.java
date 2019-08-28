@@ -27,13 +27,13 @@ public class UserHandler {
     private final @NonNull UserRepository userRepository;
     private final @NonNull UserValidator userValidator;
 
-    public Mono<ServerResponse> getUsers(ServerRequest serverRequest) {
+    public Mono<ServerResponse> findUsers(ServerRequest serverRequest) {
         return ok()
             .contentType(APPLICATION_JSON)
             .body(userRepository.findAll(), User.class);
     }
 
-    public Mono<ServerResponse> signUpUser(ServerRequest serverRequest) {
+    public Mono<ServerResponse> createUser(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(User.class)
             .flatMap(user -> Flux.concat(
                 validateUser(user),
