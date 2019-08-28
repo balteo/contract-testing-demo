@@ -12,6 +12,7 @@ plugins {
     id 'org.springframework.boot' version '2.2.0.BUILD-SNAPSHOT'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
+    id 'maven'
 }
 
 apply plugin: 'spring-cloud-contract'
