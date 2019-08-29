@@ -26,8 +26,15 @@ describe('UserService', () => {
       .createUser(user)
       .subscribe(
         (user: User) => {
-          done();
           expect(user).not.toBeNull();
+          expect(user).toEqual(
+            expect.objectContaining({
+              id: expect.any(Number),
+              firstName: expect.any(String),
+              lastName: expect.any(String),
+              email: expect.any(String)
+            }));
+          done();
         });
   });
 });
