@@ -1,0 +1,43 @@
+{
+  "consumer": {
+    "name": "MyConsumer"
+  },
+  "provider": {
+    "name": "MyProvider"
+  },
+  "interactions": [
+    {
+      "description": "a request for cats with given catId",
+      "providerState": "i have a list of cats",
+      "request": {
+        "method": "POST",
+        "path": "/api/user",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "firstName": "John",
+          "lastName": "Smith",
+          "email": "john@example.com"
+        }
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "id": 1,
+          "firstName": "John",
+          "lastName": "Smith",
+          "email": "john@example.com"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

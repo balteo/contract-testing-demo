@@ -16,6 +16,7 @@ export class UserService {
   }
 
   createUser(user: User): Observable<User> {
-    return this.httpClient.post<User>('/api/user', user);
+    //FIXME: introduce proxy and remove hard-coded value here
+    return this.httpClient.post<User>('http://localhost:8991/api/user', user);
   }
 }

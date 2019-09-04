@@ -9,6 +9,6 @@
   ],
   "exclude": [
     "**/*.spec.ts",
-    "**/*.contract-spec.ts"
+    "**/*.pact-spec.ts"
   ]
 }
