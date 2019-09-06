@@ -3,7 +3,9 @@ package org.example.contracttestingdemo.validator;
 import org.example.contracttestingdemo.domain.User;
 import org.example.contracttestingdemo.handler.UserHandler;
 import org.example.contracttestingdemo.routerfunction.UserRouter;
+import org.example.contracttestingdemo.utils.ReactiveOnOperatorDebugHook;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:db/clean.sql")
+@ExtendWith(ReactiveOnOperatorDebugHook.class)
 @SpringBootTest
 class UserSignUpTest {
 
