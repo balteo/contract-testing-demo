@@ -48,7 +48,6 @@ public class UserHandler {
     public Mono<ServerResponse> createUser_(ServerRequest serverRequest) {
         return serverRequest
             .bodyToMono(User.class)
-            .cache()
             .flatMap(user ->
                 validateUser(user)
                     .switchIfEmpty(validateEmailNotExists(user))
