@@ -1,9 +1,10 @@
-package org.example.contracttestingdemo.validator;
+package org.example.contracttestingdemo.user;
 
 import org.example.contracttestingdemo.domain.User;
 import org.example.contracttestingdemo.handler.UserHandler;
 import org.example.contracttestingdemo.routerfunction.UserRouter;
 import org.example.contracttestingdemo.utils.ReactiveOnOperatorDebugHook;
+import org.example.contracttestingdemo.validator.UserValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
