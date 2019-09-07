@@ -34,31 +34,28 @@ public class UserHandler {
     }
 
     public Mono<ServerResponse> createUser(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(User.class)
-            .flatMap(user -> Flux.concat(
-                validateUser(user),
-                validateEmailNotExists(user),
-                saveUser(user))
-                .next()
-                .single()
-            );
+        Mono<User> userMono = serverRequest.bodyToMono(User.class);
+        return Flux.concat(
+            validateUser(userMono),
+            validateEmailNotExists(userMono),
+            saveUser(userMono)
+        )
+            .next()
+            .single();
     }
 
     //Alternative to the above createUser method
     public Mono<ServerResponse> createUser_(ServerRequest serverRequest) {
-        return serverRequest
-            .bodyToMono(User.class)
-            .flatMap(user ->
-                validateUser(user)
-                    .switchIfEmpty(validateEmailNotExists(user))
-                    .switchIfEmpty(saveUser(user))
-                    .single()
-            );
+        Mono<User> userMono = serverRequest.bodyToMono(User.class);
+        return validateUser(userMono)
+            .switchIfEmpty(validateEmailNotExists(userMono))
+            .switchIfEmpty(saveUser(userMono))
+            .single();
     }
 
-    private Mono<ServerResponse> validateUser(User user) {
-        return Mono.just(new BeanPropertyBindingResult(user, User.class.getName()))
-            .doOnNext(err -> userValidator.validate(user, err))
+    private Mono<ServerResponse> validateUser(Mono<User> userMono) {
+        return userMono
+            .map(this::computeErrors)
             .filter(AbstractBindingResult::hasErrors)
             .flatMap(err ->
                 status(BAD_REQUEST)
@@ -67,8 +64,15 @@ public class UserHandler {
             );
     }
 
-    private Mono<ServerResponse> validateEmailNotExists(User user) {
-        return userRepository.findByEmail(user.getEmail())
+    private AbstractBindingResult computeErrors(User user) {
+        AbstractBindingResult errors = new BeanPropertyBindingResult(user, User.class.getName());
+        userValidator.validate(user, errors);
+        return errors;
+    }
+
+    private Mono<ServerResponse> validateEmailNotExists(Mono<User> userMono) {
+        return userMono
+            .flatMap(user -> userRepository.findByEmail(user.getEmail()))
             .flatMap(existingUser ->
                 status(BAD_REQUEST)
                     .contentType(APPLICATION_JSON)
@@ -76,8 +80,9 @@ public class UserHandler {
             );
     }
 
-    private Mono<ServerResponse> saveUser(User user) {
-        return userRepository.save(user)
+    private Mono<ServerResponse> saveUser(Mono<User> userMono) {
+        return userMono
+            .flatMap(userRepository::save)
             .flatMap(newUser -> status(CREATED)
                 .contentType(APPLICATION_JSON)
                 .body(BodyInserters.fromObject(newUser))
