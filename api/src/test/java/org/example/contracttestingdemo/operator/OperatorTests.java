@@ -1,4 +1,4 @@
-package org.example.contracttestingdemo;
+package org.example.contracttestingdemo.operator;
 
 import org.example.contracttestingdemo.utils.ReactiveOnOperatorDebugHook;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ class OperatorTests {
 
 
     @Test
-    void orTest() {
+    void orVsSwitchIfEmptyTest() {
         Mono<String> chain = Mono.<String>empty().switchIfEmpty(Mono.just("hello"));
 
         StepVerifier.create(
