@@ -33,7 +33,8 @@ public class UserHandler {
             .body(userRepository.findAll(), User.class);
     }
 
-    public Mono<ServerResponse> createUser(ServerRequest serverRequest) {
+    //Alternative to the below createUser method
+    public Mono<ServerResponse> createUser_(ServerRequest serverRequest) {
         Mono<User> userMono = serverRequest.bodyToMono(User.class);
         return Flux.concat(
             validateUser(userMono),
@@ -44,9 +45,8 @@ public class UserHandler {
             .single();
     }
 
-    //Alternative to the above createUser method
-    public Mono<ServerResponse> createUser_(ServerRequest serverRequest) {
-        Mono<User> userMono = serverRequest.bodyToMono(User.class);
+    public Mono<ServerResponse> createUser(ServerRequest serverRequest) {
+        Mono<User> userMono = serverRequest.bodyToMono(User.class).cache();
         return validateUser(userMono)
             .switchIfEmpty(validateEmailNotExists(userMono))
             .switchIfEmpty(saveUser(userMono))
