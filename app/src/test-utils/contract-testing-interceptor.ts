@@ -9,11 +9,9 @@ export class ContractTestingInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.apiUrl) {
-      request = request.clone({
-        url: `${this.apiUrl}${request.urlWithParams}`
-      });
-    }
+    request = request.clone({
+      url: `${this.apiUrl}${request.urlWithParams}`
+    });
     return next.handle(request);
   }
 }

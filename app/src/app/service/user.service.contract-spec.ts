@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { UserService } from './user.service';
 import { User } from '../domain/user.model';
 import { HttpClientModule } from '@angular/common/http';
-import { contractTestingInterceptorProvider, apiUrlProvider } from '../../testing-providers';
+import { contractTestingInterceptorProvider, apiUrlProvider } from '../../test-utils/testing-providers';
 
 describe('UserService', () => {
 
