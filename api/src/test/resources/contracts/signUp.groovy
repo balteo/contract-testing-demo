@@ -14,7 +14,7 @@ org.springframework.cloud.contract.spec.Contract.make {
     response {
         status CREATED()
         body([
-            id       : 3,
+            id       : 1,
             firstName: "John",
             lastName : "Smith",
             email    : "john@example.com"
