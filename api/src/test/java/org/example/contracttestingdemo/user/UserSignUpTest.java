@@ -109,7 +109,7 @@ class UserSignUpTest {
             .body(Mono.just(otherUser), User.class)
             .exchange()
             .expectStatus()
-            .isBadRequest();
+            .is4xxClientError();
 
         assertThat(JdbcTestUtils.countRowsInTable(jdbcTemplate, "user")).isOne();
 
