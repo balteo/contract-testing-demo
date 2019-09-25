@@ -49,6 +49,7 @@ dependencies {
     implementation 'org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:0.1.0.BUILD-SNAPSHOT'
     implementation 'org.springframework.boot.experimental:spring-boot-starter-r2dbc-h2:0.1.0.BUILD-SNAPSHOT'
     implementation 'org.flywaydb:flyway-core'
+    // FIXME: consider removing this dependency when flyway implements r2dbc
     compile "org.springframework:spring-jdbc"
     compile project(':app')
     compileOnly 'org.projectlombok:lombok'
