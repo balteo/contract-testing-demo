@@ -43,19 +43,19 @@ ext {
 }
 
 dependencies {
+    compile project(':app')
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:0.1.0.BUILD-SNAPSHOT'
-    implementation 'org.springframework.boot.experimental:spring-boot-starter-r2dbc-h2:0.1.0.BUILD-SNAPSHOT'
-    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.springframework.boot.experimental:spring-boot-starter-r2dbc:0.1.0.BUILD-SNAPSHOT'
     // FIXME: consider removing this dependency when flyway implements r2dbc
+    implementation 'org.flywaydb:flyway-core'
     compile "org.springframework:spring-jdbc"
-    compile project(':app')
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//    runtimeOnly 'io.r2dbc:r2dbc-postgresql:1.0.0.M7'
-//    runtimeOnly 'io.r2dbc:r2dbc-h2:1.0.0.M7'
+//    runtimeOnly 'io.r2dbc:r2dbc-postgresql:0.8.0.RC1'
+    runtimeOnly 'io.r2dbc:r2dbc-h2:0.8.0.RC1'
     annotationProcessor 'org.projectlombok:lombok'
     compile 'commons-validator:commons-validator:1.6'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
