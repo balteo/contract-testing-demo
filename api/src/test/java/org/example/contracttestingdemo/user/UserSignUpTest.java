@@ -5,8 +5,6 @@ import org.example.contracttestingdemo.handler.UserHandler;
 import org.example.contracttestingdemo.routerfunction.UserRouter;
 import org.example.contracttestingdemo.utils.ReactiveOnOperatorDebugHook;
 import org.example.contracttestingdemo.validator.UserValidator;
-import org.h2.tools.Server;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import reactor.core.publisher.Mono;
 
-import javax.sql.DataSource;
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,11 +38,6 @@ class UserSignUpTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    @BeforeAll
-    static void setUp(@Autowired DataSource dataSource) throws SQLException {
-        Server.startWebServer(dataSource.getConnection());
-    }
 
     @Test
     void shouldRejectInvalidEmail() {
