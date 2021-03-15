@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 
-@Configuration
+@Configuration(proxyBeanMethods=false)
 public class UserRouter {
 
     @Bean
