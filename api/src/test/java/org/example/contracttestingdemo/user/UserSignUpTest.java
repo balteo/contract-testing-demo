@@ -3,27 +3,21 @@ package org.example.contracttestingdemo.user;
 import org.example.contracttestingdemo.domain.User;
 import org.example.contracttestingdemo.handler.UserHandler;
 import org.example.contracttestingdemo.routerfunction.UserRouter;
+import org.example.contracttestingdemo.utils.DatabaseExtension;
 import org.example.contracttestingdemo.utils.ReactiveOnOperatorDebugHook;
 import org.example.contracttestingdemo.validator.UserValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import reactor.core.publisher.Mono;
 
-import java.sql.SQLException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-@Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:db/clean.sql")
-@ExtendWith(ReactiveOnOperatorDebugHook.class)
+@ExtendWith({ReactiveOnOperatorDebugHook.class, DatabaseExtension.class})
 @SpringBootTest
 class UserSignUpTest {
 
@@ -36,8 +30,6 @@ class UserSignUpTest {
     @Autowired
     private UserValidator userValidator;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @Test
     void shouldRejectInvalidEmail() {
@@ -52,7 +44,7 @@ class UserSignUpTest {
     }
 
     @Test
-    void shouldSignUpUser() throws SQLException {
+    void shouldSignUpUser() {
         WebTestClient client = WebTestClient
             .bindToRouterFunction(config.route(userHandler))
             .build();
@@ -62,8 +54,6 @@ class UserSignUpTest {
             .lastName("Smith")
             .email("john@example.com")
             .build();
-
-//        Server.startWebServer(dataSource.getConnection());
 
         client
             .post()
@@ -105,8 +95,6 @@ class UserSignUpTest {
             .expectStatus()
             .is2xxSuccessful();
 
-        assertThat(JdbcTestUtils.countRowsInTable(jdbcTemplate, "user")).isOne();
-
         client
             .post()
             .uri("/api/user")
@@ -114,8 +102,6 @@ class UserSignUpTest {
             .exchange()
             .expectStatus()
             .is4xxClientError();
-
-        assertThat(JdbcTestUtils.countRowsInTable(jdbcTemplate, "user")).isOne();
 
     }
 
@@ -130,8 +116,6 @@ class UserSignUpTest {
             .lastName("Smith")
             .email("john@example.com")
             .build();
-
-        assertThat(JdbcTestUtils.countRowsInTable(jdbcTemplate, "user")).isZero();
 
         client
             .post()
