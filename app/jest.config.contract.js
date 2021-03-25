@@ -148,7 +148,7 @@ module.exports = {
   // ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
-   testRegex: [/\.contract-spec.ts$/]
+   testRegex: [/\.contract-spec.ts$/],
 
   // This option allows the use of a custom results processor
   // testResultsProcessor: null,
@@ -157,7 +157,7 @@ module.exports = {
   // testRunner: "jasmine2",
 
   // This option sets the URL for the jsdom environment. It is reflected in properties such as location.href
-  // testURL: "http://localhost",
+  testURL: "http://localhost:8080",
 
   // Setting this value to "fake" allows the use of fake timers for functions such as "setTimeout"
   // timers: "real",

@@ -18,7 +18,7 @@ describe('UserService', () => {
   });
 
   it('should create user', (done) => {
-    const service: UserService = TestBed.get(UserService);
+    const service: UserService = TestBed.inject(UserService);
 
     const user: User = {
       firstName: 'John',
