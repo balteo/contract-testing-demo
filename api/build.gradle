@@ -79,7 +79,10 @@ test {
 
 bootBuildImage {
     builder = 'paketobuildpacks/builder:tiny'
-    environment = ['BP_NATIVE_IMAGE': 'true']
+    environment = [
+        'BP_NATIVE_IMAGE': 'true',
+        'BP_NATIVE_IMAGE_BUILD_ARGUMENTS':'-H:IncludeResources=\'.*/*.(js|html)$\''
+    ]
 }
 
 dependencyManagement {
